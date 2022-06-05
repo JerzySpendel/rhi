@@ -1,6 +1,4 @@
 import math
-from operator import attrgetter
-from typing import Iterable, Reversible
 
 import requests
 import dataclasses
@@ -21,12 +19,6 @@ class Planet:
     polar_radius: float
     moons: list[Moon] = dataclasses.field(default_factory=list)
 
-    def biggest(self) -> Iterable[Moon]:
-        return reversed(self.smallest())
-
-    def smallest(self) -> Iterable[Moon] | Reversible[Moon]:
-        return sorted(self.moons, key=attrgetter('mass'))
-
 
 class Sky:
     def __init__(self, planets: list[Planet]):
@@ -37,8 +29,8 @@ class Sky:
         bodies = data['bodies']
         planets = []
 
-        planets_raw = list(filter(lambda body: body['bodyType'] == 'Planet', bodies))
-        moons_raw = list(filter(lambda body: body['bodyType'] == 'Moon', bodies))
+        planets_raw = [body for body in bodies if body['bodyType'] == 'Planet']
+        moons_raw = [body for body in bodies if body['bodyType'] == 'Moon']
 
         for planet_raw in planets_raw:
             planet = Planet(
@@ -48,6 +40,7 @@ class Sky:
                 moons=[],
             )
             moons = []
+
             for moon_raw in filter(lambda moon_raw: moon_raw['aroundPlanet']['planet'] == planet.id, moons_raw):
                 if mass_data := moon_raw.get('mass'):
                     mass = mass_data['massValue'] * 10 ** mass_data['massExponent']
@@ -67,8 +60,11 @@ class Sky:
     def from_list(cls, planet_list: list[Planet]) -> 'Sky':
         pass
 
+    def get_planet(self, name: str) -> Planet | None:
+        return next((planet for planet in self.planets if planet.name == name))
+
     def to_csv(self):
-        file = open('planets.cvs', 'w', newline='')
+        file = open('planets.csv', 'w', newline='')
         fieldnames = ['name', 'moons_count', 'smallest_moon_mass', 'second_smallest_moon_mass', 'biggest_moon_mass', 'polar_radius']
         csv_writer = csv.DictWriter(file, fieldnames=fieldnames)
 
