@@ -3,6 +3,7 @@ from django.db import models
 
 class Planet(models.Model):
     name = models.TextField()
+    mass = models.FloatField(null=True)
     polar_radius = models.FloatField()
 
 
@@ -13,4 +14,4 @@ class Moon(models.Model):
 
 class Asteroid(models.Model):
     name = models.TextField()
-    mass = models.FloatField()
+    mass = models.FloatField(null=True)

@@ -9,7 +9,7 @@ class Entity:
     @property
     def mass(self) -> float | None:
         if mass_data := self.data.get('mass'):
-            return mass_data['massValue'] * 10 ** (mass_data['massValue'])
+            return mass_data['massValue'] * 10 ** (mass_data['massExponent'])
 
     @property
     def polar_radius(self) -> float:
@@ -26,6 +26,7 @@ class Planet:
     id: str
     name: str
     polar_radius: float
+    mass: float
     moons: list[Moon] = dataclasses.field(default_factory=list)
 
 
@@ -57,6 +58,7 @@ class Sky:
                 id=planet_raw['id'],
                 name=planet_raw['englishName'],
                 polar_radius=planet_raw['polarRadius'],
+                mass=Entity(planet_raw).mass,
                 moons=[],
             )
             moons = []

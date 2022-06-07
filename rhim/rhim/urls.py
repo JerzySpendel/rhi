@@ -16,9 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from sky.views import PlanetsView
+from sky.views import PlanetsView, AsteroidsView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('planets/', PlanetsView.as_view())
+    path('planets/', PlanetsView.as_view()),
+    path('asteroids/', AsteroidsView.as_view()),
 ]
