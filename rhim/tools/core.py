@@ -57,7 +57,7 @@ class Sky:
             planet = Planet(
                 id=planet_raw['id'],
                 name=planet_raw['englishName'],
-                polar_radius=planet_raw['polarRadius'],
+                polar_radius=Entity(planet_raw).polar_radius,
                 mass=Entity(planet_raw).mass,
                 moons=[],
             )
