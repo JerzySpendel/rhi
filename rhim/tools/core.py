@@ -13,7 +13,7 @@ class Entity:
 
     @property
     def polar_radius(self) -> float:
-        return self.data['polarRadius'] / 1.609344
+        return self.data['polarRadius'] * 1000
 
 
 @dataclasses.dataclass
