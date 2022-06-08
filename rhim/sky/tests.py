@@ -1,7 +1,7 @@
 from rest_framework.reverse import reverse
 from rest_framework.test import APIClient, APITestCase
 
-from sky.models import Planet, Moon
+from sky.models import Planet, Moon, Asteroid
 
 
 class ConversionTestCase(APITestCase):
@@ -24,3 +24,14 @@ class ConversionTestCase(APITestCase):
         planet_data = response.data[0]
 
         self.assertEqual(planet_data['second_smallest_moon_mass'], 2)
+
+
+class AsteroidsTestCase(APITestCase):
+    def test_asteroids_bigger_than_venus(self):
+        Planet.objects.create(name='Venus', mass=100, polar_radius=1)
+        for mass in [10, 50, 200]:
+            Asteroid.objects.create(name=str(mass), mass=mass)
+
+        response = self.client.get(reverse('asteroids'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
