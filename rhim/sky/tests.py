@@ -7,7 +7,7 @@ from sky.models import Planet, Moon, Asteroid
 class ConversionTestCase(APITestCase):
     def test_polar_radius_unit_conversion(self):
         earth_polar_radius = 6356752
-        Planet.objects.create(name="Earth", mass=None, polar_radius=earth_polar_radius)
+        Planet.objects.create(name="Earth", polar_radius=earth_polar_radius)
         response = self.client.get(reverse('planets'))
         self.assertEqual(response.status_code, 200)
         earth_data = response.data[0]
@@ -16,14 +16,14 @@ class ConversionTestCase(APITestCase):
 
     def test_getting_second_smallest_moon(self):
         planet = Planet.objects.create(name="asdf", polar_radius=1)
-        Moon.objects.create(planet=planet, mass=1)
-        Moon.objects.create(planet=planet, mass=2)
+        Moon.objects.create(planet=planet, mass=2, polar_radius=1)
+        Moon.objects.create(planet=planet, mass=1, polar_radius=2)
 
         response = self.client.get(reverse('planets'))
         self.assertEqual(response.status_code, 200)
         planet_data = response.data[0]
 
-        self.assertEqual(planet_data['second_smallest_moon_mass'], 2)
+        self.assertEqual(planet_data['second_smallest_moon_mass'], 1)
 
 
 class AsteroidsTestCase(APITestCase):

@@ -1,4 +1,5 @@
 import dataclasses
+import math
 
 
 class Entity:
@@ -18,6 +19,7 @@ class Entity:
 @dataclasses.dataclass
 class Moon:
     mass: float
+    polar_radius: float
 
 
 @dataclasses.dataclass
@@ -63,13 +65,10 @@ class Sky:
             moons = []
 
             for moon_raw in filter(lambda moon_raw: moon_raw['aroundPlanet']['planet'] == planet.id, moons_raw):
-                if mass_data := moon_raw.get('mass'):
-                    mass = mass_data['massValue'] * 10 ** mass_data['massExponent']
-                else:
-                    mass = None
-
                 moons.append(
-                    Moon(mass=mass)
+                    Moon(mass=Entity(moon_raw).mass,
+                         polar_radius=Entity(moon_raw).polar_radius,
+                         )
                 )
 
             planet.moons = moons

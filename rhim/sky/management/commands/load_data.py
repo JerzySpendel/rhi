@@ -18,8 +18,9 @@ class Command(BaseCommand):
         for raw_planet in sky.get_planets():
             orm_planet = Planet.objects.create(name=raw_planet.name, polar_radius=raw_planet.polar_radius,
                                                mass=raw_planet.mass)
-            Moon.objects.bulk_create([Moon(mass=raw_moon.mass, planet=orm_planet) for raw_moon in raw_planet.moons])
+            Moon.objects.bulk_create([Moon(mass=raw_moon.mass, planet=orm_planet, polar_radius=raw_moon.polar_radius) for raw_moon in raw_planet.moons])
 
         Asteroid.objects.bulk_create(
-            [Asteroid(mass=asteroid_raw.mass, name=asteroid_raw.name) for asteroid_raw in AsteroidRaw.from_raw(data)]
+            [Asteroid(mass=asteroid_raw.mass,
+                      name=asteroid_raw.name) for asteroid_raw in AsteroidRaw.from_raw(data)]
         )
