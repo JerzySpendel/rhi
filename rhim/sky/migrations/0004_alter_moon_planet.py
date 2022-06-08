@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('sky', '0003_auto_20220607_1542'),
+        ('sky', '0002_alter_moon_mass'),
     ]
 
     operations = [

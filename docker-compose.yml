@@ -7,6 +7,8 @@ services:
       POSTGRES_USER: rhim
       POSTGRES_PASSWORD: rhim
       POSTGRES_DB: rhim
+    volumes:
+      - /var/lib/postgresql
   backend:
     build: .
     ports:
