@@ -1,5 +1,6 @@
 from django.db.models import F, Count, OuterRef, Subquery
 from rest_framework import generics
+from rest_framework.renderers import JSONRenderer
 from rest_framework_csv.renderers import CSVRenderer
 
 from sky.models import Planet, Moon, Asteroid
@@ -9,7 +10,7 @@ from sky.serializers import PlanetSerializer, AsteroidSerializer
 class PlanetsView(generics.ListAPIView):
     queryset = Planet.objects.all()
     serializer_class = PlanetSerializer
-    renderer_classes = [CSVRenderer]
+    renderer_classes = [CSVRenderer, JSONRenderer]
 
     def get_queryset(self):
         return super().get_queryset().annotate(
@@ -24,7 +25,7 @@ class PlanetsView(generics.ListAPIView):
 class AsteroidsView(generics.ListAPIView):
     queryset = Asteroid.objects.all()
     serializer_class = AsteroidSerializer
-    # renderer_classes = [CSVRenderer]
+    renderer_classes = [CSVRenderer]
 
     def get_queryset(self):
         venus_mass = Planet.objects.filter(name='Venus').get().mass
