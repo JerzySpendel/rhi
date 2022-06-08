@@ -12,7 +12,14 @@ class PlanetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Planet
-        fields = ['name', 'polar_radius_in_miles', 'moons_count', 'smallest_moon_mass', 'second_smallest_moon_mass', 'biggest_moon_mass']
+        fields = [
+            "name",
+            "polar_radius_in_miles",
+            "moons_count",
+            "smallest_moon_mass",
+            "second_smallest_moon_mass",
+            "biggest_moon_mass",
+        ]
 
 
 class AsteroidSerializer(serializers.ModelSerializer):
@@ -20,4 +27,4 @@ class AsteroidSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Asteroid
-        fields = ['name', 'mass_in_lbs']
+        fields = ["name", "mass_in_lbs"]

@@ -8,12 +8,12 @@ class Entity:
 
     @property
     def mass(self) -> float | None:
-        if mass_data := self.data.get('mass'):
-            return mass_data['massValue'] * 10 ** (mass_data['massExponent'])
+        if mass_data := self.data.get("mass"):
+            return mass_data["massValue"] * 10 ** (mass_data["massExponent"])
 
     @property
     def polar_radius(self) -> float:
-        return self.data['polarRadius'] * 1000
+        return self.data["polarRadius"] * 1000
 
 
 @dataclasses.dataclass
@@ -37,9 +37,14 @@ class Asteroid:
     mass: float
 
     @classmethod
-    def from_raw(cls, data: dict) -> list['Self']:
-        asteroids_raw = [entry for entry in data['bodies'] if entry['bodyType'] == 'Asteroid']
-        return [Asteroid(name=asteroid_raw['name'], mass=Entity(asteroid_raw).mass) for asteroid_raw in asteroids_raw]
+    def from_raw(cls, data: dict) -> list["Self"]:
+        asteroids_raw = [
+            entry for entry in data["bodies"] if entry["bodyType"] == "Asteroid"
+        ]
+        return [
+            Asteroid(name=asteroid_raw["name"], mass=Entity(asteroid_raw).mass)
+            for asteroid_raw in asteroids_raw
+        ]
 
 
 class Sky:
@@ -47,28 +52,32 @@ class Sky:
         self.planets = planets
 
     @classmethod
-    def from_raw(cls, data: dict) -> 'Sky':
-        bodies = data['bodies']
+    def from_raw(cls, data: dict) -> "Sky":
+        bodies = data["bodies"]
         planets = []
 
-        planets_raw = [body for body in bodies if body['bodyType'] == 'Planet']
-        moons_raw = [body for body in bodies if body['bodyType'] == 'Moon']
+        planets_raw = [body for body in bodies if body["bodyType"] == "Planet"]
+        moons_raw = [body for body in bodies if body["bodyType"] == "Moon"]
 
         for planet_raw in planets_raw:
             planet = Planet(
-                id=planet_raw['id'],
-                name=planet_raw['englishName'],
+                id=planet_raw["id"],
+                name=planet_raw["englishName"],
                 polar_radius=Entity(planet_raw).polar_radius,
                 mass=Entity(planet_raw).mass,
                 moons=[],
             )
             moons = []
 
-            for moon_raw in filter(lambda moon_raw: moon_raw['aroundPlanet']['planet'] == planet.id, moons_raw):
+            for moon_raw in filter(
+                lambda moon_raw: moon_raw["aroundPlanet"]["planet"] == planet.id,
+                moons_raw,
+            ):
                 moons.append(
-                    Moon(mass=Entity(moon_raw).mass,
-                         polar_radius=Entity(moon_raw).polar_radius,
-                         )
+                    Moon(
+                        mass=Entity(moon_raw).mass,
+                        polar_radius=Entity(moon_raw).polar_radius,
+                    )
                 )
 
             planet.moons = moons

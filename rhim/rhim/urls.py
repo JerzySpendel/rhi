@@ -19,7 +19,7 @@ from django.urls import path
 from sky.views import PlanetsView, AsteroidsView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('planets/', PlanetsView.as_view(), name='planets'),
-    path('asteroids/', AsteroidsView.as_view(), name='asteroids'),
+    path("admin/", admin.site.urls),
+    path("planets/", PlanetsView.as_view(), name="planets"),
+    path("asteroids/", AsteroidsView.as_view(), name="asteroids"),
 ]
