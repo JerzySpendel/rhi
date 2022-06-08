@@ -1,5 +1,4 @@
 import dataclasses
-import math
 
 
 class Entity:
@@ -67,7 +66,7 @@ class Sky:
                 if mass_data := moon_raw.get('mass'):
                     mass = mass_data['massValue'] * 10 ** mass_data['massExponent']
                 else:
-                    mass = math.nan
+                    mass = None
 
                 moons.append(
                     Moon(mass=mass)
@@ -77,10 +76,6 @@ class Sky:
             planets.append(planet)
 
         return Sky(planets)
-
-    @classmethod
-    def from_list(cls, planet_list: list[Planet]) -> 'Sky':
-        pass
 
     def get_planet(self, name: str) -> Planet | None:
         return next((planet for planet in self.planets if planet.name == name))

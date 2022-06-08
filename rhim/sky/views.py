@@ -25,7 +25,7 @@ class PlanetsView(generics.ListAPIView):
 class AsteroidsView(generics.ListAPIView):
     queryset = Asteroid.objects.all()
     serializer_class = AsteroidSerializer
-    renderer_classes = [CSVRenderer]
+    renderer_classes = [CSVRenderer, JSONRenderer]
 
     def get_queryset(self):
         venus_mass = Planet.objects.filter(name='Venus').get().mass
