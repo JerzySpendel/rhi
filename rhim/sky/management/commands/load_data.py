@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 
 from sky.models import Planet, Moon, Asteroid
-from tools.core import Sky, Asteroid as AsteroidRaw
+from tools.core import Planet as PlanetRaw, Asteroid as AsteroidRaw
 
 import requests
 
@@ -13,9 +13,8 @@ class Command(BaseCommand):
         Asteroid.objects.all().delete()
 
         data = requests.get("https://api.le-systeme-solaire.net/rest/bodies").json()
-        sky = Sky.from_raw(data)
 
-        for raw_planet in sky.get_planets():
+        for raw_planet in PlanetRaw.from_raw(data):
             orm_planet = Planet.objects.create(
                 name=raw_planet.name,
                 polar_radius=raw_planet.polar_radius,

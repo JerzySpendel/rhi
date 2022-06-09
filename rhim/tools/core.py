@@ -1,5 +1,4 @@
 import dataclasses
-import math
 
 
 class Entity:
@@ -30,29 +29,8 @@ class Planet:
     mass: float
     moons: list[Moon] = dataclasses.field(default_factory=list)
 
-
-@dataclasses.dataclass
-class Asteroid:
-    name: str
-    mass: float
-
     @classmethod
-    def from_raw(cls, data: dict) -> list["Self"]:
-        asteroids_raw = [
-            entry for entry in data["bodies"] if entry["bodyType"] == "Asteroid"
-        ]
-        return [
-            Asteroid(name=asteroid_raw["name"], mass=Entity(asteroid_raw).mass)
-            for asteroid_raw in asteroids_raw
-        ]
-
-
-class Sky:
-    def __init__(self, planets: list[Planet]):
-        self.planets = planets
-
-    @classmethod
-    def from_raw(cls, data: dict) -> "Sky":
+    def from_raw(cls, data: dict) -> list['Planet']:
         bodies = data["bodies"]
         planets = []
 
@@ -70,8 +48,8 @@ class Sky:
             moons = []
 
             for moon_raw in filter(
-                lambda moon_raw: moon_raw["aroundPlanet"]["planet"] == planet.id,
-                moons_raw,
+                    lambda moon_raw: moon_raw["aroundPlanet"]["planet"] == planet.id,
+                    moons_raw,
             ):
                 moons.append(
                     Moon(
@@ -83,10 +61,20 @@ class Sky:
             planet.moons = moons
             planets.append(planet)
 
-        return Sky(planets)
+        return planets
 
-    def get_planet(self, name: str) -> Planet | None:
-        return next((planet for planet in self.planets if planet.name == name))
 
-    def get_planets(self) -> list[Planet]:
-        return self.planets
+@dataclasses.dataclass
+class Asteroid:
+    name: str
+    mass: float
+
+    @classmethod
+    def from_raw(cls, data: dict) -> list["Asteroid"]:
+        asteroids_raw = [
+            entry for entry in data["bodies"] if entry["bodyType"] == "Asteroid"
+        ]
+        return [
+            Asteroid(name=asteroid_raw["name"], mass=Entity(asteroid_raw).mass)
+            for asteroid_raw in asteroids_raw
+        ]
