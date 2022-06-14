@@ -1,4 +1,3 @@
-import requests
 import csv
 import json
 
@@ -8,11 +7,10 @@ from django.shortcuts import render
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.exceptions import APIException
 from rest_framework.request import Request
-from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from sky.serializers import PlanetSerializer
-from tools.core import load_planets, Planet, load_asteroids, Asteroid
+from tools.core import Planet, Asteroid
 from requests_oauthlib import OAuth2Session
 
 from tools.database import Database
