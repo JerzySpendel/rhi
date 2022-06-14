@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "drf_yasg",
+    "social_django",
     "sky",
 ]
 
@@ -75,16 +77,7 @@ WSGI_APPLICATION = "rhim.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "rhim",
-        "USER": "rhim",
-        "PASSWORD": "rhim",
-        "HOST": "db",
-        "PORT": 5432,
-    }
-}
+DATABASES = {}
 
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": [
@@ -136,3 +129,4 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
