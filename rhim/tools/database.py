@@ -15,7 +15,6 @@ class Database:
 
         instance = Database()
         api_data = requests.get('https://api.le-systeme-solaire.net/rest/bodies').json()
-        breakpoint()
         instance.planets = cls.load_planets(api_data)
         instance.asteroids = cls.load_asteroids(api_data)
         cls._instance = instance

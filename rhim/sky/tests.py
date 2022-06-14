@@ -85,5 +85,9 @@ def test_loading_planets(api_data):
 
 
 def test_request_is_sent_once(mocker, api_data):
-    mocker.patch('tools.database.requests').get().json.side_effect = api_data
-    Database.get()
+    json = mocker.patch('tools.database.requests').get().json
+    json.return_value = api_data
+    for _ in range(10):
+        Database.get()
+
+    json.assert_called_once()
