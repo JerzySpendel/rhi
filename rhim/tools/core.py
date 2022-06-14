@@ -1,5 +1,7 @@
 import dataclasses
 
+from tools.constants import METER_TO_MIL, KG_TO_POUND
+
 
 class Entity:
     def __init__(self, entity_data: dict):
@@ -30,7 +32,10 @@ class Planet:
     moons: list[Moon] = dataclasses.field(default_factory=list)
 
     def __post_init__(self, *args, **kwargs):
-        self.moons = sorted([moon for moon in self.moons if moon.mass], key=lambda moon: moon.polar_radius)
+        self.moons = sorted(
+            [moon for moon in self.moons if moon.mass],
+            key=lambda moon: moon.polar_radius,
+        )
 
     def _smallest_moon_mass(self) -> float | None:
         if not self.moons:
@@ -52,16 +57,23 @@ class Planet:
 
     @classmethod
     def csv_fields(cls) -> list[str]:
-        return ['name', 'moons_count', 'smallest_moon_mass', 'second_smallest_moon_mass', 'biggest_moon_mass', 'polar_radius_in_miles']
+        return [
+            "name",
+            "moons_count",
+            "smallest_moon_mass",
+            "second_smallest_moon_mass",
+            "biggest_moon_mass",
+            "polar_radius_in_miles",
+        ]
 
     def csv_row(self) -> dict:
         return {
-            'name': self.name,
-            'moons_count': len(self.moons),
-            'smallest_moon_mass': self._smallest_moon_mass(),
-            'second_smallest_moon_mass': self._second_smallest_moon_mass(),
-            'biggest_moon_mass': self._biggest_moon_mass(),
-            'polar_radius_in_miles': self.polar_radius / 1609.344
+            "name": self.name,
+            "moons_count": len(self.moons),
+            "smallest_moon_mass": self._smallest_moon_mass(),
+            "second_smallest_moon_mass": self._second_smallest_moon_mass(),
+            "biggest_moon_mass": self._biggest_moon_mass(),
+            "polar_radius_in_miles": self.polar_radius * METER_TO_MIL,
         }
 
 
@@ -72,12 +84,10 @@ class Asteroid:
 
     @classmethod
     def csv_fields(cls):
-        return ['name', 'mass']
+        return ["name", "mass"]
 
     def csv_row(self) -> dict:
         return {
-            'name': self.name,
-            'mass': self.mass * 2.204,
+            "name": self.name,
+            "mass": self.mass * KG_TO_POUND,
         }
-
-

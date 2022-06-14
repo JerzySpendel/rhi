@@ -9,12 +9,12 @@ class Database:
     _instance = None
 
     @classmethod
-    def get(cls) -> 'Database':
+    def get(cls) -> "Database":
         if cls._instance:
             return cls._instance
 
         instance = Database()
-        api_data = requests.get('https://api.le-systeme-solaire.net/rest/bodies').json()
+        api_data = requests.get("https://api.le-systeme-solaire.net/rest/bodies").json()
         instance.planets = cls.load_planets(api_data)
         instance.asteroids = cls.load_asteroids(api_data)
         cls._instance = instance
@@ -22,7 +22,7 @@ class Database:
         return cls._instance
 
     @classmethod
-    def load_planets(cls, data: dict) -> list['Planet']:
+    def load_planets(cls, data: dict) -> list["Planet"]:
         bodies = data["bodies"]
         planets = []
 
@@ -40,8 +40,8 @@ class Database:
             moons = []
 
             for moon_raw in filter(
-                    lambda moon_raw: moon_raw["aroundPlanet"]["planet"] == planet.id,
-                    moons_raw,
+                lambda moon_raw: moon_raw["aroundPlanet"]["planet"] == planet.id,
+                moons_raw,
             ):
                 mass = Entity(moon_raw).mass
                 if not mass:

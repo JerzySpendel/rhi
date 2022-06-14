@@ -1,19 +1,7 @@
 services:
-  db:
-    image: postgres:latest
-    ports:
-      - 5432:5432
-    environment:
-      POSTGRES_USER: rhim
-      POSTGRES_PASSWORD: rhim
-      POSTGRES_DB: rhim
-    volumes:
-      - /var/lib/postgresql
   backend:
     build: .
     ports:
       - 8000:8000
-    depends_on:
-      - db
     volumes:
       - ./:/code
