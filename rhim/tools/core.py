@@ -7,13 +7,11 @@ class Entity:
     def __init__(self, entity_data: dict):
         self.data = entity_data
 
-    @property
-    def mass(self) -> float | None:
+    def get_mass(self) -> float | None:
         if mass_data := self.data.get("mass"):
             return mass_data["massValue"] * 10 ** (mass_data["massExponent"])
 
-    @property
-    def polar_radius(self) -> float:
+    def get_polar_radius(self) -> float:
         return self.data["polarRadius"] * 1000
 
 

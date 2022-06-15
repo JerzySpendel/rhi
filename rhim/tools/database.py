@@ -10,14 +10,12 @@ class Database:
 
     @classmethod
     def get(cls) -> "Database":
-        if cls._instance:
-            return cls._instance
-
-        instance = Database()
-        api_data = requests.get("https://api.le-systeme-solaire.net/rest/bodies").json()
-        instance.planets = cls.load_planets(api_data)
-        instance.asteroids = cls.load_asteroids(api_data)
-        cls._instance = instance
+        if not cls._instance:
+            instance = Database()
+            api_data = requests.get("https://api.le-systeme-solaire.net/rest/bodies").json()
+            instance.planets = cls.load_planets(api_data)
+            instance.asteroids = cls.load_asteroids(api_data)
+            cls._instance = instance
 
         return cls._instance
 
@@ -33,8 +31,8 @@ class Database:
             planet = Planet(
                 id=planet_raw["id"],
                 name=planet_raw["englishName"],
-                polar_radius=Entity(planet_raw).polar_radius,
-                mass=Entity(planet_raw).mass,
+                polar_radius=Entity(planet_raw).get_polar_radius(),
+                mass=Entity(planet_raw).get_mass(),
                 moons=[],
             )
             moons = []
@@ -43,14 +41,14 @@ class Database:
                 lambda moon_raw: moon_raw["aroundPlanet"]["planet"] == planet.id,
                 moons_raw,
             ):
-                mass = Entity(moon_raw).mass
+                mass = Entity(moon_raw).get_mass()
                 if not mass:
                     continue
 
                 moons.append(
                     Moon(
                         mass=mass,
-                        polar_radius=Entity(moon_raw).polar_radius,
+                        polar_radius=Entity(moon_raw).get_polar_radius(),
                     )
                 )
 
@@ -66,6 +64,6 @@ class Database:
         ]
 
         return [
-            Asteroid(name=asteroid_raw["name"], mass=Entity(asteroid_raw).mass)
+            Asteroid(name=asteroid_raw["name"], mass=Entity(asteroid_raw).get_mass())
             for asteroid_raw in asteroids_raw
         ]
